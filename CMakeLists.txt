@@ -11,4 +11,4 @@ find_package(Boost REQUIRED)
 
 include_directories("${Boost_INCLUDE_DIR}")
 
-add_executable(HelloWorld main.cpp)
+add_executable(HelloWorld Graph.cpp Graph.h main.cpp)

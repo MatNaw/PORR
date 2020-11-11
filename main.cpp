@@ -1,31 +1,17 @@
 #include <iostream>
-#include <boost/graph/graph_traits.hpp>
-#include <boost/graph/adjacency_matrix.hpp>
-#include <boost/graph/graph_utility.hpp>
+#include "Graph.h"
 
-int main() {
-    enum { A, B, C, D, E, F, N };
-    const char* name = "ABCDEF";
+int main(int argc, char **argv) {
 
-    typedef boost::adjacency_matrix<boost::directedS> Graph;
-    Graph g(N);
-    add_edge(B, C, g);
-    add_edge(B, F, g);
-    add_edge(C, A, g);
-    add_edge(C, C, g);
-    add_edge(D, E, g);
-    add_edge(E, D, g);
-    add_edge(F, A, g);
+    int vertexCount = 10;
 
-    std::cout << "vertex set: ";
-    boost::print_vertices(g, name);
-    std::cout << std::endl;
+    Graph graph(vertexCount);
+    graph.addEdge(1, 2);
+    graph.addEdge(5, 8);
 
-    std::cout << "edge set: ";
-    boost::print_edges(g, name);
-    std::cout << std::endl;
-
-    std::cout << "out-edges: " << std::endl;
-    boost::print_graph(g, name);
-    std::cout << std::endl;
+    std::cout << graph[1][1] << std::endl;
+    std::cout << graph[1][2] << std::endl;
+    std::cout << graph[5][8] << std::endl;
+    std::cout << graph[8][5] << std::endl;
+    std::cout << graph[1][8] << std::endl;
 }
