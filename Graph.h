@@ -19,14 +19,18 @@ public:
     }
 
     void addEdge(int a, int b) {
-        adjacencyMatrix[a][b] = 1;
-        adjacencyMatrix[b][a] = 1;
+        adjacencyMatrix[a-1][b-1] = 1;
+        adjacencyMatrix[b-1][a-1] = 1;
     }
 
-    int* operator[](int index)
-    {
-        return adjacencyMatrix[index];
+    int getEdge(int a, int b) {
+        return adjacencyMatrix[a-1][b-1];
     }
+
+//    int* operator[](int index)
+//    {
+//        return adjacencyMatrix[index];
+//    }
 
     int getVertexCount() const {
         return vertexCount;
