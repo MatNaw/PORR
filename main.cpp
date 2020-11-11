@@ -5,36 +5,44 @@
 #include <memory>
 #include "Graph.h"
 
-std::unique_ptr<Graph> extractFileToGraph(std::string fileName) {
-    int vertexNumber = 0;
-    int edgesNumber = 0;
-    std::unique_ptr<Graph> g;
+std::unique_ptr<Graph> extractFileToGraph(const std::string& fileName) {
+    std::unique_ptr<Graph> graph;
     std::string line;
     std::ifstream fin(fileName);
+    int vertexNumber = 0;
+    int edgesNumber = 0;
+
     while (getline(fin, line)) {
+        // omit comments section
         if (line[0] == '%')
             continue;
-        else if (vertexNumber == 0) {
-            //wczytanie liczby wierzcholkow i krawedzi
+        else {
             std::stringstream ss;
             ss << line;
-            ss >> vertexNumber >> vertexNumber >> edgesNumber;
-            g = std::make_unique<Graph>(vertexNumber);
-        } else {
-            //wczytywanie krawedzi
-            int a, b;
-            std::stringstream ss;
-            ss << line;
-            ss >> a >> b;
-            g->addEdge(a, b);
+
+            if (vertexNumber == 0) {
+                // space delimiter to omit first value
+                ss.ignore(std::numeric_limits<std::streamsize>::max(), ' ');
+                // read the number of vertices and the number of edges
+                ss >> vertexNumber >> edgesNumber;
+                graph = std::make_unique<Graph>(vertexNumber);
+            }
+            else {
+                // read every particular edge
+                int vertexA, vertexB;
+                ss >> vertexA >> vertexB;
+
+                graph->addEdge(vertexA, vertexB);
+            }
         }
     }
+
     fin.close();
-    return std::move(g);
+    return std::move(graph);
 }
 
-int main(int argc, char **argv) {
-
-    std::unique_ptr<Graph> g = extractFileToGraph("C:/Users/rados/CLionProjects/PORR/input/karate.txt");
-    std::cout << g->getEdge(1, 5) << std::endl;
+int main() {
+    //std::unique_ptr<Graph> graph = extractFileToGraph("../input/karate.txt");
+    std::unique_ptr<Graph> graph = extractFileToGraph("../input/dolphins.txt");
+    graph->showFriends();
 }
