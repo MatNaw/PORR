@@ -3,6 +3,7 @@
 #include <string>
 #include <sstream>
 #include <memory>
+#include <limits>
 #include "Graph.h"
 
 std::unique_ptr<Graph> extractFileToGraph(const std::string& fileName) {
