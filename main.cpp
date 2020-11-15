@@ -44,6 +44,7 @@ std::unique_ptr<Graph> extractFileToGraph(const std::string& fileName) {
 
 int main() {
     //std::unique_ptr<Graph> graph = extractFileToGraph("../input/karate.txt");
-    std::unique_ptr<Graph> graph = extractFileToGraph("../input/dolphins.txt");
+    //std::unique_ptr<Graph> graph = extractFileToGraph("../input/dolphins.txt");
+    std::unique_ptr<Graph> graph = extractFileToGraph("../input/emails.txt");
     graph->showFriends();
 }
