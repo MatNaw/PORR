@@ -29,7 +29,11 @@ public:
 
     int getVertexCount() const;
 
+    //sequential
     void showFriends();
+
+    //parallel with OpenMP
+    void showFriendsOptimized();
 
 private:
     const int vertexCount;
