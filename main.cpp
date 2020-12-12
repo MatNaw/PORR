@@ -5,6 +5,7 @@
 #include <chrono>
 #include <memory>
 #include <limits>
+#include <omp.h>
 #include "Graph.h"
 
 std::unique_ptr<Graph> extractFileToGraph(const std::string& fileName) {
@@ -48,11 +49,14 @@ void showExecutionTime(std::chrono::duration<double, std::milli> elapsed_time) {
 }
 
 int main() {
+    omp_set_num_threads(6);
+
     // For karate and dolphins datasets -> OpenMP solution time is higher than the sequential solution time
     // (probably too small datasets)
     //std::unique_ptr<Graph> graph = extractFileToGraph("../input/karate.txt");
     //std::unique_ptr<Graph> graph = extractFileToGraph("../input/dolphins.txt");
-    std::unique_ptr<Graph> graph = extractFileToGraph("../input/emails.txt");
+
+    std::unique_ptr<Graph> graph = extractFileToGraph("../input/list32k.txt");
 
     //sequential solution
     auto start = std::chrono::high_resolution_clock::now();

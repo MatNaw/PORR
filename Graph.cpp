@@ -1,13 +1,12 @@
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "openmp-use-default-none"
 #include <iostream>
 #include "Graph.h"
 
 void Graph::addEdge(int vertexA, int vertexB) {
-    adjacencyMatrix[vertexA - 1][vertexB - 1] = 1;
-    adjacencyMatrix[vertexB - 1][vertexA - 1] = 1;
-}
-
-int Graph::getEdge(int vertexA, int vertexB) {
-    return adjacencyMatrix[vertexA - 1][vertexB - 1];
+    int first = std::max(vertexA, vertexB);
+    int second = std::min(vertexA, vertexB);
+    adjacencyMatrix[first - 1][second - 1] = 1;
 }
 
 int Graph::getVertexCount() const {
@@ -19,7 +18,7 @@ void Graph::showFriends() {
         int counter = 0;
 //        std::cout << "Friends of " << i+1 << ": ";
 
-        for (int j = 0; j < getVertexCount(); ++j) {
+        for (int j = 0; j < i + 1; ++j) {
             if (adjacencyMatrix[i][j] == 1) {
                 ++counter;
 //                std::cout << j+1;
@@ -41,7 +40,7 @@ void Graph::showFriendsOptimized() {
 //        std::cout << "Friends of " << i+1 << ": ";
 
         #pragma omp parallel for
-        for (int j = 0; j < getVertexCount(); ++j) {
+        for (int j = 0; j < i + 1; ++j) {
             if (adjacencyMatrix[i][j] == 1) {
                 ++counter;
 //                std::cout << j+1;
@@ -55,3 +54,4 @@ void Graph::showFriendsOptimized() {
     }
 //    std::cout << "Searching finished!" << std::endl;
 }
+#pragma clang diagnostic pop
