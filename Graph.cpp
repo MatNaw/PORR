@@ -1,6 +1,6 @@
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "openmp-use-default-none"
-#include <iostream>
+#include <algorithm>
 #include "Graph.h"
 
 void Graph::addEdge(int vertexA, int vertexB) {
