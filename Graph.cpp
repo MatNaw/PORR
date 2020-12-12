@@ -1,13 +1,12 @@
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "openmp-use-default-none"
 #include <iostream>
+#include <algorithm>
 #include "Graph.h"
 
 void Graph::addEdge(int vertexA, int vertexB) {
-    adjacencyMatrix[vertexA - 1][vertexB - 1] = 1;
-    adjacencyMatrix[vertexB - 1][vertexA - 1] = 1;
-}
-
-int Graph::getEdge(int vertexA, int vertexB) {
-    return adjacencyMatrix[vertexA - 1][vertexB - 1];
+    adjacencyLists[vertexA].push_back(vertexB);
+    adjacencyLists[vertexB].push_back(vertexA);
 }
 
 int Graph::getVertexCount() const {
@@ -17,41 +16,27 @@ int Graph::getVertexCount() const {
 void Graph::showFriends() {
     for (int i = 0; i < getVertexCount(); ++i) {
         int counter = 0;
-//        std::cout << "Friends of " << i+1 << ": ";
 
         for (int j = 0; j < getVertexCount(); ++j) {
-            if (adjacencyMatrix[i][j] == 1) {
+            if (std::find(adjacencyLists[i].begin(), adjacencyLists[i].end(), j) != adjacencyLists[i].end()) {
                 ++counter;
-//                std::cout << j+1;
-
-//                if (j != getVertexCount() - 1) {
-//                    std::cout << " ";
-//                }
             }
         }
-//        std::cout << "Total number of friends of " << i+1 << ": " << counter << std::endl;
     }
-//    std::cout << "Searching finished!" << std::endl;
 }
 
 void Graph::showFriendsOptimized() {
     #pragma omp parallel for
     for (int i = 0; i < getVertexCount(); ++i) {
         int counter = 0;
-//        std::cout << "Friends of " << i+1 << ": ";
 
         #pragma omp parallel for
         for (int j = 0; j < getVertexCount(); ++j) {
-            if (adjacencyMatrix[i][j] == 1) {
+            if (std::find(adjacencyLists[i].begin(), adjacencyLists[i].end(), j) != adjacencyLists[i].end()) {
                 ++counter;
-//                std::cout << j+1;
-
-//                if (j != getVertexCount() - 1) {
-//                    std::cout << " ";
-//                }
+//                std::cout << i << " " << j << " " << counter << std::endl;
             }
         }
-//        std::cout << "Total number of friends of " << i+1 << ": " << counter << std::endl;
     }
-//    std::cout << "Searching finished!" << std::endl;
 }
+#pragma clang diagnostic pop
