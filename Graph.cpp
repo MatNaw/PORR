@@ -16,42 +16,26 @@ int Graph::getVertexCount() const {
 void Graph::showFriends() {
     for (int i = 0; i < getVertexCount(); ++i) {
         int counter = 0;
-//        std::cout << "Friends of " << i+1 << ": ";
 
         for (int j = 0; j < i + 1; ++j) {
             if (adjacencyMatrix[i][j] == 1) {
                 ++counter;
-//                std::cout << j+1;
-
-//                if (j != getVertexCount() - 1) {
-//                    std::cout << " ";
-//                }
             }
         }
-//        std::cout << "Total number of friends of " << i+1 << ": " << counter << std::endl;
     }
-//    std::cout << "Searching finished!" << std::endl;
 }
 
 void Graph::showFriendsOptimized() {
     #pragma omp parallel for
     for (int i = 0; i < getVertexCount(); ++i) {
         int counter = 0;
-//        std::cout << "Friends of " << i+1 << ": ";
 
         #pragma omp parallel for
         for (int j = 0; j < i + 1; ++j) {
             if (adjacencyMatrix[i][j] == 1) {
                 ++counter;
-//                std::cout << j+1;
-
-//                if (j != getVertexCount() - 1) {
-//                    std::cout << " ";
-//                }
             }
         }
-//        std::cout << "Total number of friends of " << i+1 << ": " << counter << std::endl;
     }
-//    std::cout << "Searching finished!" << std::endl;
 }
 #pragma clang diagnostic pop
