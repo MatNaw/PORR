@@ -5,37 +5,9 @@
 #include <chrono>
 #include <memory>
 #include <limits>
-#include <omp.h>
 #include "Graph.h"
 
-std::unique_ptr<Graph> loadGraph(const std::string& fileName);
-
-void showExecutionTime(std::chrono::duration<double, std::milli> elapsed_time);
-
-int main() {
-    std::unique_ptr<Graph> graph = loadGraph("../input/list32k.txt");
-
-    for (int i = 1; i <= 50; ++i) {
-        omp_set_num_threads(i);
-        std::cout << i << " ";
-
-        //sequential solution
-        auto start = std::chrono::high_resolution_clock::now();
-        graph->showFriends();
-        auto end = std::chrono::high_resolution_clock::now();
-        showExecutionTime(end - start);
-
-        //parallel solution (OpenMP)
-        start = std::chrono::high_resolution_clock::now();
-        graph->showFriendsOptimized();
-        end = std::chrono::high_resolution_clock::now();
-        showExecutionTime(end - start);
-
-        std::cout << std::endl;
-    }
-}
-
-std::unique_ptr<Graph> loadGraph(const std::string& fileName) {
+std::unique_ptr<Graph> extractFileToGraph(const std::string& fileName) {
     std::unique_ptr<Graph> graph;
     std::string line;
     std::ifstream fin(fileName);
@@ -72,5 +44,29 @@ std::unique_ptr<Graph> loadGraph(const std::string& fileName) {
 }
 
 void showExecutionTime(std::chrono::duration<double, std::milli> elapsed_time) {
-    std::cout << elapsed_time.count() << " ";
+    std::cout << "Execution time: " << elapsed_time.count() << std::endl << std::endl;
+}
+
+int main() {
+    // For karate and dolphins datasets -> OpenMP solution time is higher than the sequential solution time
+    // (probably too small datasets)
+//    std::unique_ptr<Graph> graph = extractFileToGraph("../input/karate.txt");
+//    std::unique_ptr<Graph> graph = extractFileToGraph("../input/dolphins.txt");
+    std::unique_ptr<Graph> graph = extractFileToGraph("../input/emails.txt");
+
+    //sequential solution
+    auto start = std::chrono::high_resolution_clock::now();
+    graph->showFriends();
+    auto end = std::chrono::high_resolution_clock::now();
+
+    std::cout << "Sequential solution:" << std::endl;
+    showExecutionTime(end - start);
+
+    //parallel solution (OpenMP)
+    start = std::chrono::high_resolution_clock::now();
+    graph->showFriendsOptimized();
+    end = std::chrono::high_resolution_clock::now();
+
+    std::cout << "Parallel solution (OpenMP):" << std::endl;
+    showExecutionTime(end - start);
 }
