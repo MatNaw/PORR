@@ -12,18 +12,24 @@ import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
-public class WordCount {
+public class FriendsCount {
 
     public static class Map extends Mapper<LongWritable, Text, Text, IntWritable> {
         private final static IntWritable one = new IntWritable(1);
-        private Text word = new Text();
 
         public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
-            String line = value.toString();
-            StringTokenizer tokenizer = new StringTokenizer(line);
-            while (tokenizer.hasMoreTokens()) {
-                word.set(tokenizer.nextToken());
-                context.write(word, one);
+            final String line = value.toString();
+            final Scanner scanner = new Scanner(line);
+            if(line.startsWith("%"))
+            {
+                return;
+            }
+
+            final String vertexA = scanner.next();
+            final String vertexB = scanner.next();
+            if(!scanner.hasNext()) {
+                context.write(new Text(vertexA), one);
+                context.write(new Text(vertexB), one);
             }
         }
     }
@@ -33,8 +39,8 @@ public class WordCount {
         public void reduce(Text key, Iterable<IntWritable> values, Context context)
             throws IOException, InterruptedException {
             int sum = 0;
-            for (IntWritable val : values) {
-                sum += val.get();
+            for (IntWritable value : values) {
+                sum += value.get();
             }
             context.write(key, new IntWritable(sum));
         }
@@ -43,8 +49,8 @@ public class WordCount {
     public static void main(String[] args) throws Exception {
         Configuration conf = new Configuration();
 
-        Job job = Job.getInstance(conf, "wordcount");
-        job.setJarByClass(WordCount.class);
+        Job job = Job.getInstance(conf, "friendscount");
+        job.setJarByClass(FriendsCount.class);
 
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
@@ -61,5 +67,4 @@ public class WordCount {
 
         job.waitForCompletion(true);
     }
-
 }
