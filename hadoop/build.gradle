@@ -1,0 +1,21 @@
+plugins {
+    id 'java'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+    implementation group: 'org.apache.hadoop', name: 'hadoop-core', version: '1.2.1'
+    implementation 'org.apache.hadoop:hadoop-mapreduce-client-core:2.7.3'
+}
+
+test {
+    useJUnitPlatform()
+}
