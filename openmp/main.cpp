@@ -52,7 +52,7 @@ int main() {
     // (probably too small datasets)
 //    std::unique_ptr<Graph> graph = extractFileToGraph("../input/karate.txt");
 //    std::unique_ptr<Graph> graph = extractFileToGraph("../input/dolphins.txt");
-    std::unique_ptr<Graph> graph = extractFileToGraph("../input/emails.txt");
+    std::unique_ptr<Graph> graph = extractFileToGraph("../input/list512k.txt");
 
     //sequential solution
     auto start = std::chrono::high_resolution_clock::now();
