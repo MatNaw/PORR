@@ -23,11 +23,6 @@ public class FriendsCountSequential {
             final Integer friendsOfB = friends.getOrDefault(vertexB, 0);
             friends.put(vertexA, friendsOfA + 1);
             friends.put(vertexB, friendsOfB + 1);
-            long counter = 0;
-            for (int i = 0; i < 1000000; i++) {
-                counter += i*i;
-            }
-            System.out.println(vertexA + " " + vertexB + " " + counter);
         }
         final long end = System.currentTimeMillis();
         System.out.println(end - start);

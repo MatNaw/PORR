@@ -1,8 +1,6 @@
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "openmp-use-default-none"
-#include <algorithm>
 #include <iostream>
-#include <Windows.h>
 #include "Graph.h"
 
 //static volatile int counter;
