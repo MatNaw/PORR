@@ -2,19 +2,20 @@
 #define PORR_GRAPH_H
 
 #include <string>
+#include <map>
 
 class Graph {
 public:
     explicit Graph(int vertexCount): vertexCount(vertexCount)
     {
-        adjacencyMatrix = new int*[vertexCount];
+        //adjacencyMatrix = new int*[vertexCount];
         for (int i = 0; i < vertexCount; ++i)
         {
-            adjacencyMatrix[i] = new int[i + 1];
-
-            for (int j = 0; j < i + 1; ++j) {
-                adjacencyMatrix[i][j] = 0;
-            }
+            //adjacencyMatrix[i] = new int[i + 1];
+            adjacencyMatrix_test[i] = 0;
+//            for (int j = 0; j < i + 1; ++j) {
+//                //adjacencyMatrix[i][j] = 0;
+//            }
         }
     }
 
@@ -31,6 +32,7 @@ public:
 private:
     const int vertexCount;
     int **adjacencyMatrix;
+    std::map<int, int> adjacencyMatrix_test;
 };
 
 
