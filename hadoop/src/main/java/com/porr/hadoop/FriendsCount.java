@@ -1,30 +1,34 @@
 package com.porr.hadoop;
 
-import java.io.IOException;
-import java.util.*;
-
+import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.conf.*;
-import org.apache.hadoop.io.*;
-import org.apache.hadoop.mapreduce.*;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.Mapper;
+import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
+import java.io.IOException;
+import java.util.Scanner;
+
 public class FriendsCount {
 
     public static class Map extends Mapper<LongWritable, Text, Text, IntWritable> {
+
         private final static IntWritable one = new IntWritable(1);
 
         public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
+
             final String line = value.toString();
             final Scanner scanner = new Scanner(line);
-            if(line.startsWith("%"))
-            {
+            if(line.startsWith("%")) {
                 return;
             }
-
             final String vertexA = scanner.next();
             final String vertexB = scanner.next();
             if(!scanner.hasNext()) {
@@ -56,7 +60,6 @@ public class FriendsCount {
         job.setOutputValueClass(IntWritable.class);
 
         job.setMapperClass(Map.class);
-        job.setCombinerClass(Reduce.class);
         job.setReducerClass(Reduce.class);
 
         job.setInputFormatClass(TextInputFormat.class);

@@ -49,6 +49,8 @@ void showExecutionTime(std::chrono::duration<double, std::milli> elapsed_time) {
 }
 
 int main() {
+    // For karate and dolphins datasets -> OpenMP solution time is higher than the sequential solution time
+    // (probably too small datasets)
     auto start = std::chrono::high_resolution_clock::now();
     std::unique_ptr<Graph> graph = extractFileToGraph("../input/list512k.txt");
 
