@@ -7,6 +7,10 @@
 #include <limits>
 #include "Graph.h"
 
+#ifndef THREADS_NUMBER
+#define THREADS_NUMBER 8
+#endif
+
 std::unique_ptr<Graph> extractFileToGraph(const std::string& fileName) {
     std::unique_ptr<Graph> graph;
     std::string line;
@@ -44,8 +48,10 @@ std::unique_ptr<Graph> extractFileToGraph(const std::string& fileName) {
     return std::move(graph);
 }
 
-void showExecutionTime(std::chrono::duration<double, std::milli> elapsed_time) {
-    std::cout << "Execution time: " << elapsed_time.count() << std::endl << std::endl;
+auto calcExecutionTime(std::chrono::time_point<std::chrono::steady_clock> start,
+                       std::chrono::time_point<std::chrono::steady_clock> end) {
+    std::chrono::duration<double, std::milli> elapsedTime = end - start;
+    return elapsedTime.count();
 }
 
 int main() {
@@ -53,23 +59,21 @@ int main() {
     // (probably these are too small datasets)
 //    auto start = std::chrono::high_resolution_clock::now();
     std::unique_ptr<Graph> graph = extractFileToGraph("../input/list32k.txt");
-    int THREADS_NUMBER = 8;
+    for (int threadsNumber = 1; threadsNumber <= THREADS_NUMBER; threadsNumber++) {
+        std::cout << "Threads: " << threadsNumber << std::endl;
 
-    //sequential solution
-    auto start = std::chrono::high_resolution_clock::now(); // 1200
-    graph->showFriends();
-    auto end = std::chrono::high_resolution_clock::now();
-    //karate - 30 ms ; list32k - 14172 ms ; list128k - 57492 ms ; list256k - 119163 ms ; list512k - 282393 ms
+        //sequential solution
+        auto start = std::chrono::high_resolution_clock::now(); // 1200
+        graph->showFriends();
+        auto sequential = calcExecutionTime(start, std::chrono::high_resolution_clock::now());
+        //karate - 30 ms ; list32k - 14172 ms ; list128k - 57492 ms ; list256k - 119163 ms ; list512k - 282393 ms
 
-    std::cout << "Sequential solution:" << std::endl;
-    showExecutionTime(end - start);
+        //parallel solution (OpenMP)
+        start = std::chrono::high_resolution_clock::now();
+        graph->showFriendsOptimized(threadsNumber);
+        auto parallel = calcExecutionTime(start, std::chrono::high_resolution_clock::now());
 
-    //parallel solution (OpenMP)
-    start = std::chrono::high_resolution_clock::now();
-    graph->showFriendsOptimized(THREADS_NUMBER);
-    end = std::chrono::high_resolution_clock::now();
-
-    std::cout << "Parallel solution (OpenMP):" << std::endl;
-    showExecutionTime(end - start);
-//    showExecutionTime(std::chrono::high_resolution_clock::now() - start);
+        std::cout << "Sequential / parallel (OpenMP): " << std::endl << sequential << " " << parallel << std::endl;
+//        showExecutionTime(std::chrono::high_resolution_clock::now() - start);
+    }
 }
