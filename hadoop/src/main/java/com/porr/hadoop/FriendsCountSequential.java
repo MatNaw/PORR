@@ -29,7 +29,8 @@ public class FriendsCountSequential {
             friends.put(vertexA, friendsOfA + 1);
             friends.put(vertexB, friendsOfB + 1);
             System.out.println(vertexA + " " + vertexB);
-    }
+        }
+
         final long end = System.currentTimeMillis();
         System.out.println(end - start);
     }

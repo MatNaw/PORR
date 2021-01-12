@@ -49,24 +49,27 @@ void showExecutionTime(std::chrono::duration<double, std::milli> elapsed_time) {
 }
 
 int main() {
-    // For karate and dolphins datasets -> OpenMP solution time is higher than the sequential solution time
-    // (probably too small datasets)
-    auto start = std::chrono::high_resolution_clock::now();
-    std::unique_ptr<Graph> graph = extractFileToGraph("../input/list512k.txt");
+    // For 'karate' and 'dolphins' datasets -> OpenMP solution time is higher than the sequential solution time
+    // (probably these are too small datasets)
+//    auto start = std::chrono::high_resolution_clock::now();
+    std::unique_ptr<Graph> graph = extractFileToGraph("../input/list32k.txt");
+    int THREADS_NUMBER = 8;
 
-//    //sequential solution
-//    auto start = std::chrono::high_resolution_clock::now(); 1200
+    //sequential solution
+    auto start = std::chrono::high_resolution_clock::now(); // 1200
     graph->showFriends();
-//    auto end = std::chrono::high_resolution_clock::now(); karate - 30 ms ; list32k - 14172 ms ; list128k - 57492 ms ; list256k - 119163 ms ; list512k - 119163 ms
-//
-//    std::cout << "Sequential solution:" << std::endl;
-//    showExecutionTime(end - start);
-//
-//    //parallel solution (OpenMP)
-//    start = std::chrono::high_resolution_clock::now();
-//    graph->showFriendsOptimized();
-//    end = std::chrono::high_resolution_clock::now();
+    auto end = std::chrono::high_resolution_clock::now();
+    //karate - 30 ms ; list32k - 14172 ms ; list128k - 57492 ms ; list256k - 119163 ms ; list512k - 282393 ms
 
-//    std::cout << "Parallel solution (OpenMP):" << std::endl;
-    showExecutionTime(std::chrono::high_resolution_clock::now() - start);
+    std::cout << "Sequential solution:" << std::endl;
+    showExecutionTime(end - start);
+
+    //parallel solution (OpenMP)
+    start = std::chrono::high_resolution_clock::now();
+    graph->showFriendsOptimized(THREADS_NUMBER);
+    end = std::chrono::high_resolution_clock::now();
+
+    std::cout << "Parallel solution (OpenMP):" << std::endl;
+    showExecutionTime(end - start);
+//    showExecutionTime(std::chrono::high_resolution_clock::now() - start);
 }
