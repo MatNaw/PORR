@@ -57,16 +57,15 @@ auto calcExecutionTime(std::chrono::time_point<std::chrono::steady_clock> start,
 int main() {
     // For 'karate' and 'dolphins' datasets -> OpenMP solution time is higher than the sequential solution time
     // (probably these are too small datasets)
-//    auto start = std::chrono::high_resolution_clock::now();
     std::unique_ptr<Graph> graph = extractFileToGraph("../input/list32k.txt");
     for (int threadsNumber = 1; threadsNumber <= THREADS_NUMBER; threadsNumber++) {
         std::cout << "Threads: " << threadsNumber << std::endl;
 
         //sequential solution
-        auto start = std::chrono::high_resolution_clock::now(); // 1200
+        auto start = std::chrono::high_resolution_clock::now();
         graph->showFriends();
         auto sequential = calcExecutionTime(start, std::chrono::high_resolution_clock::now());
-        //karate - 30 ms ; list32k - 14172 ms ; list128k - 57492 ms ; list256k - 119163 ms ; list512k - 282393 ms
+
 
         //parallel solution (OpenMP)
         start = std::chrono::high_resolution_clock::now();
@@ -74,6 +73,5 @@ int main() {
         auto parallel = calcExecutionTime(start, std::chrono::high_resolution_clock::now());
 
         std::cout << "Sequential / parallel (OpenMP): " << std::endl << sequential << " " << parallel << std::endl;
-//        showExecutionTime(std::chrono::high_resolution_clock::now() - start);
     }
 }

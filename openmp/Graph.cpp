@@ -39,7 +39,6 @@ void Graph::showFriendsOptimized(int threadsNumber) {
     for (int i = 0; i < getVertexCount(); ++i) {
         int counter = 0;
 
-        #pragma omp parallel for num_threads(threadsNumber)
         for (int j = 0; j < i + 1; ++j) {
             if (adjacencyMatrix[i][j] == 1) {
                 ++counter;
